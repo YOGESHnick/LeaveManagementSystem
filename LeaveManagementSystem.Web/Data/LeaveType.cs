@@ -2,13 +2,11 @@
 
 namespace LeaveManagementSystem.Web.Data
 {
-    public class LeaveType
+    public class LeaveType : BaseEntity
     {
-        public int Id { get; set; }
-        // [MaxLength(150)]
-        [Column(TypeName = "nvarchar(150)")]
+        [MaxLength(150)]
+        //[Column(TypeName = "nvarchar(150)")]
         public required string Name { get; set; }
         public int NumberOfDays { get; set; }
-
     }
 }
