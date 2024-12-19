@@ -11,7 +11,9 @@ namespace LeaveManagementSystem.Web.Services.LeaveAllocations
         public async Task AllocateLeave(string employeeId)
         {
             // get all leave types
-            var leaveTypes = await _context.LeavesTypes.ToListAsync();
+            var leaveTypes = await _context.LeavesTypes
+                .Where( q => !q.LeaveAllocations.Any( x => x.EmployeeId == employeeId ))
+                .ToListAsync();
 
             // get current period based on the year
             var currentDate = DateTime.Now;
@@ -50,6 +52,7 @@ namespace LeaveManagementSystem.Web.Services.LeaveAllocations
                 : await _userManager.FindByIdAsync(userId);
             var allocations = await GetAllocations(user.Id);
             var allocationVmList = _mapper.Map<List<LeaveAllocation>, List<LeaveAllocationVM>> (allocations);
+            var leaveTypesCount = await _context.LeavesTypes.CountAsync();
 
             var employeeVm = new EmployeeAllocationVM
             {
@@ -59,7 +62,7 @@ namespace LeaveManagementSystem.Web.Services.LeaveAllocations
                 LastName = user.LastName,
                 Id = user.Id,
                 LeaveAllocations = allocationVmList,
-                //IsCompletedAllocation = leaveTypesCount == allocations.Count
+                IsCompletedAllocation = leaveTypesCount == allocations.Count
             };
             return employeeVm;
         }
@@ -92,6 +95,16 @@ namespace LeaveManagementSystem.Web.Services.LeaveAllocations
            .ToListAsync();
             return leaveAllocations;
         }
+
+        private async Task<bool> AllocationExists(string userId, int periodId, int leaveTypeId)
+        {
+            var exists = await _context.LeaveAllocations.AnyAsync(q =>
+                q.EmployeeId == userId
+                && q.LeaveTypeId == leaveTypeId
+                && q.PeriodId == periodId
+            );
+
+            return exists;
+        }
     }
-    
 }

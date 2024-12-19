@@ -14,7 +14,7 @@ namespace LeaveManagementSystem.Web.Models.LeaveAllocations
 
         [Display(Name = "Email address")]
         public string Email { get; set; }
-        //public bool IsCompletedAllocation { get; set; }
+        public bool IsCompletedAllocation { get; set; }
         public List<LeaveAllocationVM> LeaveAllocations { get; set; }
     }
 }
