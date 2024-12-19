@@ -1,9 +1,13 @@
-﻿namespace LeaveManagementSystem.Web.Services.LeaveAllocations
+﻿using LeaveManagementSystem.Web.Models.LeaveAllocations;
+
+namespace LeaveManagementSystem.Web.Services.LeaveAllocations
 {
     public interface ILeaveAllocationsService
     {
         Task AllocateLeave(string employeeId);
-        Task<List<LeaveAllocation>> GetAllocations();
+        //Task<List<LeaveAllocation>> GetAllocations(string? userId);
+        Task<EmployeeAllocationVM> GetEmployeeAllocations(string? userId);
+        Task<List<EmployeeListVM>> GetEmployees();
         //Task<EmployeeAllocationVM> GetEmployeeAllocations(string? userId);
         //Task<LeaveAllocationEditVM> GetEmployeeAllocation(int allocationId);
         //Task<List<EmployeeListVM>> GetEmployees();

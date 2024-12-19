@@ -10,7 +10,7 @@ using LeaveManagementSystem.Web.Models.LeaveTypes;
 using AutoMapper;
 using System.Data;
 using LeaveManagementSystem.Web.Common;
-using LeaveManagementSystem.Web.Services.LeaveType;
+using LeaveManagementSystem.Web.Services.LeaveTypes;
 
 namespace LeaveManagementSystem.Web.Controllers
 {
