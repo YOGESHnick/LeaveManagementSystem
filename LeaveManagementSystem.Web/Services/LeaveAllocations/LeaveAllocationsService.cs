@@ -75,6 +75,33 @@ namespace LeaveManagementSystem.Web.Services.LeaveAllocations
             return employees;
         }
 
+        public async Task<LeaveAllocationEditVM> GetEmployeeAllocation(int allocationId)
+        {
+            var allocation = await _context.LeaveAllocations
+                .Include(q => q.LeaveType)
+                .Include(q => q.Employee)
+                .FirstOrDefaultAsync(q => q.Id == allocationId);
+
+            var model = _mapper.Map<LeaveAllocationEditVM>(allocation);
+            return model;
+        }
+        public async Task EditAllocation(LeaveAllocationEditVM allocationEditVm)
+        {
+            //var leaveAllocation = await GetEmployeeAllocation(allocationEditVm.Id);
+            //if(leaveAllocation == null)
+            //{
+            //    throw new Exception("Leave allocation Record Does not exist");
+            //}
+            //leaveAllocation.Days = allocationEditVm.Days;
+            //_context.Update(leaveAllocation);
+            //_context.Entry(leaveAllocation).State = EntityState.Modified;
+            //await _context.SaveChangesAsync();
+
+            await _context.LeaveAllocations
+            .Where(q => q.Id == allocationEditVm.Id)
+            .ExecuteUpdateAsync(s => s.SetProperty(e => e.Days, allocationEditVm.Days));
+        }
+
         private async Task<List<LeaveAllocation>> GetAllocations(string? userId)
         {
 
@@ -95,7 +122,6 @@ namespace LeaveManagementSystem.Web.Services.LeaveAllocations
            .ToListAsync();
             return leaveAllocations;
         }
-
         private async Task<bool> AllocationExists(string userId, int periodId, int leaveTypeId)
         {
             var exists = await _context.LeaveAllocations.AnyAsync(q =>
