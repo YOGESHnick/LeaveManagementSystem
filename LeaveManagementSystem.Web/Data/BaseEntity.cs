@@ -1,4 +1,6 @@
-﻿namespace LeaveManagementSystem.Web.Data
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace LeaveManagementSystem.Web.Data
 {
     public abstract class BaseEntity
     {
