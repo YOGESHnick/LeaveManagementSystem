@@ -36,7 +36,7 @@ namespace LeaveManagementSystem.Web.Services.LeaveRequests
             var allocationToDeduct = await _context.LeaveAllocations
                 .FirstAsync(q => q.LeaveTypeId == model.LeaveTypeId && q.EmployeeId == user.Id);
 
-            allocationToDeduct.Days = -numberOfDays;
+            allocationToDeduct.Days -= numberOfDays;
             //await UpdateAllocationDays(leaveRequest, true);
             await _context.SaveChangesAsync();
         }
@@ -51,12 +51,27 @@ namespace LeaveManagementSystem.Web.Services.LeaveRequests
             return allocationToDeduct.Days < numberOfDays;
         }
 
-        public Task<EmployeeLeaveRequestListVM> GetEmployeeLeaveRequests()
+        public async Task<List<LeaveRequestReadOnlyVM>> GetEmployeeLeaveRequests()
         {
-            throw new NotImplementedException();
+            var user = await _userManager.GetUserAsync(_httpContextAccessor.HttpContext?.User);
+            var leaveRequests = await _context.leaveRequest
+                .Include(q => q.LeaveType)
+                .Where(q => q.EmployeeId == user.Id)
+                .ToListAsync();
+            var model = leaveRequests.Select(q => new LeaveRequestReadOnlyVM
+            {
+                StartDate = q.StartDate,
+                EndDate = q.EndDate,
+                Id = q.Id,
+                LeaveType = q.LeaveType.Name,
+                LeaveRequestStatus = (LeaveRequestStatusEnum)q.LeaveRequestStatusId,
+                NumberOfDays = q.EndDate.DayNumber - q.StartDate.DayNumber,
+            }).ToList();
+
+            return model;
         }
 
-        public Task<LeaveRequestListVM> GetAllLeaveRequests()
+        public Task<LeaveRequestReadOnlyVM> GetAllLeaveRequests()
         {
             throw new NotImplementedException();
         }

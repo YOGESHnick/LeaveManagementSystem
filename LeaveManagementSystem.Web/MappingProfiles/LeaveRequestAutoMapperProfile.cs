@@ -10,7 +10,7 @@ namespace LeaveManagementSystem.Web.MappingProfiles
         {
             //CreateMap<LeaveRequest, LeaveTypeReadOnlyVM>();
             // .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name));
-            CreateMap<LeaveRequestCreateVM, LeaveType>();
+            CreateMap<LeaveRequestCreateVM, LeaveRequest>();
             //CreateMap<LeaveTypeEditVM, LeaveType>().ReverseMap();
         }
     }

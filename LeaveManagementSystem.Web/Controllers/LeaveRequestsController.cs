@@ -12,8 +12,8 @@ namespace LeaveManagementSystem.Web.Controllers
     {
         public async Task<IActionResult> Index()
         {
-            //var model = await _leaveRequestsService.GetEmployeeLeaveRequests();
-            return View();
+            var model = await _leaveRequestsService.GetEmployeeLeaveRequests();
+            return View(model);
         }
         public async Task<IActionResult> Create()
         {
@@ -44,7 +44,7 @@ namespace LeaveManagementSystem.Web.Controllers
             if (ModelState.IsValid)
             {
                 await _leaveRequestsService.CreateLeaveRequest(model);
-                //return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index));
             }
 
                 var leaveTypes = await _leaveTypesService.GetAll();
