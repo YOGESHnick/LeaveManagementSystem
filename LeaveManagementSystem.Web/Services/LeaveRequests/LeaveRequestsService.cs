@@ -12,9 +12,18 @@ namespace LeaveManagementSystem.Web.Services.LeaveRequests
         ApplicationDbContext _context,
         ILeaveAllocationsService _leaveAllocationsService) : ILeaveRequestsService
     {
-        public Task CancelLeaveRequest(int leaveRequestId)
+        public async Task CancelLeaveRequest(int leaveRequestId)
         {
-            throw new NotImplementedException();
+           var leaveRequest = await _context.leaveRequest.FindAsync(leaveRequestId);
+            leaveRequest.LeaveRequestStatusId = (int)LeaveRequestStatusEnum.Canceled;
+
+            var numberOfDays = leaveRequest.EndDate.DayNumber - leaveRequest.StartDate.DayNumber;
+            var allocation = await _context.LeaveAllocations
+                .FirstAsync(q => q.LeaveTypeId == leaveRequest.LeaveTypeId && q.EmployeeId == leaveRequest.EmployeeId);
+
+            allocation.Days += numberOfDays;
+
+            await _context.SaveChangesAsync();
         }
 
         public async Task CreateLeaveRequest(LeaveRequestCreateVM model)
