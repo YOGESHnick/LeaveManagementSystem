@@ -15,10 +15,10 @@ namespace LeaveManagementSystem.Web.Controllers
             var model = await _leaveRequestsService.GetEmployeeLeaveRequests();
             return View(model);
         }
-        public async Task<IActionResult> Create()
+        public async Task<IActionResult> Create(int? leaveTypeId)
         {
             var leaveTypes = await _leaveTypesService.GetAll();
-            var leaveTypesList = new SelectList(leaveTypes, "Id", "Name");
+            var leaveTypesList = new SelectList(leaveTypes, "Id", "Name", leaveTypeId);
             var model = new LeaveRequestCreateVM
             {
                 StartDate = DateOnly.FromDateTime(DateTime.Now),
@@ -63,7 +63,7 @@ namespace LeaveManagementSystem.Web.Controllers
         }
 
         // Admin/Supe review requests
-        //[Authorize(Policy = "AdminSupervisorOnly")]
+        [Authorize(Policy = "AdminSupervisorOnly")]
         public async Task<IActionResult> ListRequests()
         {
             var model = await _leaveRequestsService.AdminGetAllLeaveRequests();
