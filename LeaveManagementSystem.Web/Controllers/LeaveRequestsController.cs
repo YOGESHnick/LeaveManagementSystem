@@ -1,9 +1,6 @@
-﻿using LeaveManagementSystem.Web.Models.LeaveRequests;
-using LeaveManagementSystem.Web.Services.LeaveRequests;
-using LeaveManagementSystem.Web.Services.LeaveTypes;
-using Microsoft.AspNetCore.Mvc;
+﻿using LeaveManagementSystem.Application.Models.LeaveRequests;
+using LeaveManagementSystem.Application.Services.LeaveTypes;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace LeaveManagementSystem.Web.Controllers
 {
@@ -47,11 +44,11 @@ namespace LeaveManagementSystem.Web.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-                var leaveTypes = await _leaveTypesService.GetAll();
-                model.LeaveTypes = new SelectList(leaveTypes, "Id", "Name");
+            var leaveTypes = await _leaveTypesService.GetAll();
+            model.LeaveTypes = new SelectList(leaveTypes, "Id", "Name");
             return View(model);
         }
-        
+
 
         // Employee Cancel requests
         [HttpPost]

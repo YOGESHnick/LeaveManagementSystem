@@ -2,25 +2,9 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 #nullable disable
 
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Text.Encodings.Web;
-using System.Threading;
-using System.Threading.Tasks;
-using LeaveManagementSystem.Web.Services.LeaveAllocations;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.Services;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.WebUtilities;
+using LeaveManagementSystem.Application.Services.LeaveAllocations;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 
 namespace LeaveManagementSystem.Web.Areas.Identity.Pages.Account
 {
@@ -126,8 +110,8 @@ namespace LeaveManagementSystem.Web.Areas.Identity.Pages.Account
             public DateOnly DateOfBirth { get; set; }
 
 
-            public string RoleName {  get; set; }
-            
+            public string RoleName { get; set; }
+
         }
 
 
@@ -137,7 +121,7 @@ namespace LeaveManagementSystem.Web.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             var roles = await _roleManager.Roles
                 .Select(q => q.Name)
-                .Where( q => q != "Administrator")
+                .Where(q => q != "Administrator")
                 .ToArrayAsync();
             RoleNames = roles;
 

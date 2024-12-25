@@ -1,23 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using LeaveManagementSystem.Application.Models.LeaveTypes;
+using LeaveManagementSystem.Application.Services.LeaveTypes;
 using Microsoft.EntityFrameworkCore;
-using LeaveManagementSystem.Web.Data;
-using LeaveManagementSystem.Web.Models.LeaveTypes;
-using AutoMapper;
-using System.Data;
-using LeaveManagementSystem.Web.Common;
-using LeaveManagementSystem.Web.Services.LeaveTypes;
 
 namespace LeaveManagementSystem.Web.Controllers
 {
     [Authorize(Roles = Roles.Administrator)]
-    public class LeaveTypesController (ILeaveTypeService _leaveTypesService) : Controller
+    public class LeaveTypesController(ILeaveTypeService _leaveTypesService) : Controller
     {
-        private readonly ILeaveTypeService leaveTypesService = _leaveTypesService;
+        //private readonly ILeaveTypeService leaveTypesService = _leaveTypesService;
 
         // GET: LeaveTypes
         public async Task<IActionResult> Index()
@@ -149,6 +139,6 @@ namespace LeaveManagementSystem.Web.Controllers
         {
             await _leaveTypesService.Remove(id);
             return RedirectToAction(nameof(Index));
-        } 
+        }
     }
 }

@@ -1,12 +1,10 @@
 using System.Reflection;
-using LeaveManagementSystem.Web.Data;
-using LeaveManagementSystem.Web.Services.Email;
-using LeaveManagementSystem.Web.Services.LeaveAllocations;
-using LeaveManagementSystem.Web.Services.LeaveRequests;
-using LeaveManagementSystem.Web.Services.LeaveTypes;
-using LeaveManagementSystem.Web.Services.Periods;
-using LeaveManagementSystem.Web.Services.Users;
-using Microsoft.AspNetCore.Identity;
+using LeaveManagementSystem.Application;
+using LeaveManagementSystem.Application.Services.Email;
+using LeaveManagementSystem.Application.Services.LeaveAllocations;
+using LeaveManagementSystem.Application.Services.LeaveTypes;
+using LeaveManagementSystem.Application.Services.Periods;
+using LeaveManagementSystem.Application.Services.Users;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,21 +14,28 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-builder.Services.AddScoped<ILeaveTypeService, LeaveTypeService>();
-builder.Services.AddScoped<ILeaveAllocationsService, LeaveAllocationsService>();
-builder.Services.AddScoped<ILeaveRequestsService, LeaveRequestsService>();
-builder.Services.AddScoped<IPeriodsService, PeriodsService>();
-builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddTransient<IEmailSender, EmailSender>();
 
-builder.Services.AddAuthorization(options => {
-    options.AddPolicy("AdminSupervisorOnly", policy => {
+ApplicationServicesRegistration.AddApplicationServices(builder.Services);
+
+//builder.Services.AddScoped<ILeaveTypeService, LeaveTypeService>();
+//builder.Services.AddScoped<ILeaveAllocationsService, LeaveAllocationsService>();
+//builder.Services.AddScoped<ILeaveRequestsService, LeaveRequestsService>();
+//builder.Services.AddScoped<IPeriodsService, PeriodsService>();
+//builder.Services.AddScoped<IUserService, UserService>();
+//builder.Services.AddTransient<IEmailSender, EmailSender>();
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("AdminSupervisorOnly", policy =>
+    {
         policy.RequireRole(Roles.Administrator, Roles.Supervisor);
     });
 });
 
 builder.Services.AddHttpContextAccessor();
-builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
+
+//builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
+
 
 builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddRoles<IdentityRole>()
