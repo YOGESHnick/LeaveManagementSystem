@@ -5,13 +5,15 @@ using Microsoft.EntityFrameworkCore;
 namespace LeaveManagementSystem.Web.Controllers
 {
     [Authorize(Roles = Roles.Administrator)]
-    public class LeaveTypesController(ILeaveTypeService _leaveTypesService) : Controller
+    public class LeaveTypesController(ILeaveTypeService _leaveTypesService, 
+        ILogger<LeaveTypesController> _logger) : Controller
     {
         //private readonly ILeaveTypeService leaveTypesService = _leaveTypesService;
 
         // GET: LeaveTypes
         public async Task<IActionResult> Index()
         {
+            _logger.LogInformation("Loading leave types");
             var viewData = await _leaveTypesService.GetAll();
             return View(viewData);
         }
@@ -55,6 +57,7 @@ namespace LeaveManagementSystem.Web.Controllers
                 await _leaveTypesService.Create(leaveTypeCreate);
                 return RedirectToAction(nameof(Index));
             }
+            _logger.LogWarning("Leave type attempt failed due to invalidity");
             return View(leaveTypeCreate);
         }
 
